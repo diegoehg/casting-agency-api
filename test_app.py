@@ -17,3 +17,6 @@ client = app.test_client
 def test_get_movies():
     response = client().get('/movies')
     assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['success']

@@ -17,6 +17,10 @@ def create_app(test_config=None):
 
     CORS(app)
 
+    @app.route('/movies')
+    def get_movies():
+        return jsonify(success=True)
+
     return app
 
 
