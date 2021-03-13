@@ -41,6 +41,15 @@ For running the API, just execute the `app` module:
 python3 app.py
 ```
 
+### Testing the API
+A suite of unit tests is provided in `test_app.py` module. You can compose an
+URL to connect to a testing database. For running the suit of test, just run:
+
+```bash
+pytest
+```
+
+
 ## License
 All of the files included in this project are covered by the 
 [MIT License](https://github.com/diegoehg/casting-agency-api/blob/main/LICENSE).
