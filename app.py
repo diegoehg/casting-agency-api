@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db
+from models import setup_db, Movie
 
 
 def create_app(test_config=None):
@@ -19,7 +19,9 @@ def create_app(test_config=None):
 
     @app.route('/movies')
     def get_movies():
-        return jsonify(success=True)
+        return jsonify(success=True,
+                       movies=[m.format() for m in Movie.query.order_by(Movie.id).slice(0, 10)],
+                       total_movies=Movie.query.count())
 
     return app
 

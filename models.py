@@ -1,5 +1,6 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String, Date
 
 os_database_path = os.environ['DATABASE_URL']
 
@@ -13,3 +14,11 @@ def setup_db(app, database_path=os_database_path):
     db.app = app
     db.init_app(app)
     db.create_all()
+
+
+class Movie(db.Model):
+    __tablename__ = 'movies'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    release_date = Column(Date, nullable=False)
