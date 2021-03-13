@@ -10,7 +10,11 @@ def create_app(test_config=None):
     Create and configure the app
     """
     app = Flask(__name__)
-    setup_db(app)
+    if test_config is None:
+        setup_db(app)
+    else:
+        setup_db(app, test_config['DATABASE_URL'])
+
     CORS(app)
 
     return app
