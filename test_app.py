@@ -34,6 +34,7 @@ def test_get_movies_default_page(client):
     data = response.get_json()
     assert data['success']
     assert data['movies'] == movies
+    assert len(data['movies']) == 10
     assert data['total_movies'] == total_movies
 
 
