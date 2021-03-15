@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Movie
 
-
 MOVIES_PER_PAGE = 10
 
 
@@ -32,9 +31,22 @@ def create_app(test_config=None):
         page_number = request.args.get('page', 1, type=int)
         movies = get_paginated_movies(page_number)
 
-        return jsonify(success=True,
-                       movies=movies,
-                       total_movies=Movie.query.count())
+        if len(movies) == 0:
+            abort(404)
+
+        return jsonify(
+            success=True,
+            movies=movies,
+            total_movies=Movie.query.count()
+        )
+
+    @app.errorhandler(404)
+    def not_found_handler(error):
+        return jsonify(
+            success=False,
+            error=error.code,
+            message="Resource not found"
+        ), error.code
 
     return app
 

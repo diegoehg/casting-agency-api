@@ -46,9 +46,20 @@ def test_get_movies_page_2(client):
     total_movies = Movie.query.count()
 
     data = response.get_json()
+    assert data['success']
     assert data['movies'] == movies
     assert len(data['movies']) == 10
     assert data['total_movies'] == total_movies
+
+
+def test_404_in_get_movies_unexistent_page(client):
+    response = client.get('/movies', query_string={'page': 2000})
+    assert response.status_code == 404
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
 
 
 if __name__ == "__main__":
