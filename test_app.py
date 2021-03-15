@@ -1,6 +1,7 @@
+import pytest
 from app import create_app
 from models import db, Movie
-import pytest
+from data_loader import load_data
 
 
 @pytest.fixture(scope='module')
@@ -19,6 +20,7 @@ def client():
     with app.test_client() as testing_client:
         with app.app_context():
             db.create_all()
+            load_data()
             yield testing_client
 
 
