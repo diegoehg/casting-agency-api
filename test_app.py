@@ -38,5 +38,18 @@ def test_get_movies_default_page(client):
     assert data['total_movies'] == total_movies
 
 
+def test_get_movies_page_2(client):
+    response = client.get('/movies', query_string={'page': 2})
+    assert response.status_code == 200
+
+    movies = [m.format() for m in Movie.query.order_by(Movie.id).slice(10, 20)]
+    total_movies = Movie.query.count()
+
+    data = response.get_json()
+    assert data['movies'] == movies
+    assert len(data['movies']) == 10
+    assert data['total_movies'] == total_movies
+
+
 if __name__ == "__main__":
     pytest.main()

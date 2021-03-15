@@ -5,6 +5,16 @@ from flask_cors import CORS
 from models import setup_db, Movie
 
 
+MOVIES_PER_PAGE = 10
+
+
+def get_paginated_movies(page_number):
+    start_index = (page_number - 1) * MOVIES_PER_PAGE
+    end_index = start_index + MOVIES_PER_PAGE
+    questions_page = Movie.query.order_by(Movie.id).slice(start_index, end_index)
+    return [q.format() for q in questions_page]
+
+
 def create_app(test_config=None):
     """
     Create and configure the app
@@ -19,8 +29,11 @@ def create_app(test_config=None):
 
     @app.route('/movies')
     def get_movies():
+        page_number = request.args.get('page', 1, type=int)
+        movies = get_paginated_movies(page_number)
+
         return jsonify(success=True,
-                       movies=[m.format() for m in Movie.query.order_by(Movie.id).slice(0, 10)],
+                       movies=movies,
                        total_movies=Movie.query.count())
 
     return app
