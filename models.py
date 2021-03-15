@@ -34,5 +34,5 @@ class Movie(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "release_date": self.release_date
+            "release_date": self.release_date.isoformat()
         }
