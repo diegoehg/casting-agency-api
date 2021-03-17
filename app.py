@@ -1,8 +1,7 @@
-import os
 from flask import Flask, request, abort, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Movie
+from auth import requires_auth, AuthException
 
 MOVIES_PER_PAGE = 10
 
@@ -27,6 +26,7 @@ def create_app(test_config=None):
     CORS(app)
 
     @app.route('/movies')
+    @requires_auth('get:movies')
     def get_movies():
         page_number = request.args.get('page', 1, type=int)
         movies = get_paginated_movies(page_number)
@@ -47,6 +47,14 @@ def create_app(test_config=None):
             error=error.code,
             message="Resource not found"
         ), error.code
+
+    @app.errorhandler(AuthException)
+    def authorization_exception_handler(exception):
+        return jsonify(
+            success=False,
+            error=exception.status_code,
+            message=exception.message
+        ), exception.status_code
 
     return app
 

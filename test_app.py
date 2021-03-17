@@ -62,5 +62,15 @@ def test_404_in_get_movies_unexistent_page(client):
     assert data['message'] == 'Resource not found'
 
 
+def test_401_when_request_does_not_contain_authorization_header(client):
+    response = client.get('/movies')
+    assert response.status_code == 401
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 401
+    assert data['message'] == 'Request does not contain authorization header'
+
+
 if __name__ == "__main__":
     pytest.main()

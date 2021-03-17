@@ -15,8 +15,8 @@ class AuthException(Exception):
     """
     Marks exception during authorization and token validation
     """
-    def __init__(self, error, status_code):
-        self.error = error
+    def __init__(self, message, status_code):
+        self.message = message
         self.status_code = status_code
 
 
