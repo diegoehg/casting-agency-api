@@ -24,8 +24,16 @@ def client():
             yield testing_client
 
 
-def test_get_movies_default_page(client):
-    response = client.get('/movies')
+@pytest.fixture(scope='module')
+def token_casting_assistant():
+    yield {
+        "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IllKTHRSdUJFM1QxVXVNR0VkTWdaeCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iYWxpYW4udXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwMGRmNmI2ZmZjYmUyMDA2YTg4NmUyZCIsImF1ZCI6ImNhc3RpbmctYWdlbmN5LWF1dGgtYXBpIiwiaWF0IjoxNjE2MDMzNzIzLCJleHAiOjE2MTYwNDA5MjMsImF6cCI6Ik9yQTZkRFZiVmVYZ01YQkFsVHFuWHI4UE9RU2MyYVY4Iiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.chIxG2SEouVdBMKNS6WeS4f3o6R_OVuFqjbPnog7soan07mX2x753gcefEqRryx1WX3uXU6fQd3B5aya4iMFmSWmIMXpAeSVZ8rsm9fCOR1oRrye6778xXZlH1o4RVUvAAU-sLKbVuvtaHVGWhrONYVxxnNVBLzenJf6gR2iArUUfloG2cUJ4aykj5g609LasHHXWM8kJxQFa7KNuDNCyrWe7CsdR-8RDXqyO643NgpF8okbP7ygr7z-01Hv16E-hnsAh1CzzBHvaoFF8zOahGhSQQ_9vNkdAl0-u39DHpFPdNakZDG45vZ5UZoGZdP3_wOLIr2lDOwf-cYIY-evKQ"
+    }
+
+
+def test_get_movies_default_page(client, token_casting_assistant):
+    response = client.get('/movies',
+                          headers=token_casting_assistant)
     assert response.status_code == 200
 
     movies = [m.format() for m in Movie.query.order_by(Movie.id).slice(0, 10)]
@@ -38,8 +46,10 @@ def test_get_movies_default_page(client):
     assert data['total_movies'] == total_movies
 
 
-def test_get_movies_page_2(client):
-    response = client.get('/movies', query_string={'page': 2})
+def test_get_movies_page_2(client, token_casting_assistant):
+    response = client.get('/movies',
+                          query_string={'page': 2},
+                          headers=token_casting_assistant)
     assert response.status_code == 200
 
     movies = [m.format() for m in Movie.query.order_by(Movie.id).slice(10, 20)]
@@ -52,8 +62,10 @@ def test_get_movies_page_2(client):
     assert data['total_movies'] == total_movies
 
 
-def test_404_in_get_movies_unexistent_page(client):
-    response = client.get('/movies', query_string={'page': 2000})
+def test_404_in_get_movies_unexistent_page(client, token_casting_assistant):
+    response = client.get('/movies',
+                          query_string={'page': 2000},
+                          headers=token_casting_assistant)
     assert response.status_code == 404
 
     data = response.get_json()

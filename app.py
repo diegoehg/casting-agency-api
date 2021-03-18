@@ -27,7 +27,7 @@ def create_app(test_config=None):
 
     @app.route('/movies')
     @requires_auth('get:movies')
-    def get_movies():
+    def get_movies(payload):
         page_number = request.args.get('page', 1, type=int)
         movies = get_paginated_movies(page_number)
 
