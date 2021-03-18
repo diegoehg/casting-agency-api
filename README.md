@@ -77,6 +77,39 @@ The permissions assign to these roles are the following:
   * `post:movies`
   * `delete:movies`
 
+## Endpoints
+
+### GET /movies
+It returns a paginated list of movies & the total number of movies kept in the
+database.
+
+* Request arguments:
+  - `page`: indicate the page number requested (e. g. `/movies=?page=3`)
+* Response fields:
+  - `success`: boolean value that indicates if the request has been succesful.
+  - `movies`: contains a list of movies, at most 10 for every page.
+  - `total_movies`: number of movies included in the database.
+* Permission required: `get:movies`
+  
+Response example:
+```json
+{
+  "success": true,
+  "movies": [
+    {
+      "id": 51,
+      "title": "Avengers",
+      "release_date": "2012-03-20"
+    },
+    {
+      "id": 52,
+      "title": "E. T.",
+      "release_date": "1982-07-20"
+    }
+  ],
+  "total_movies": 412
+}
+```
 
 ## License
 All of the files included in this project are covered by the 
