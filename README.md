@@ -53,6 +53,30 @@ URL to connect to a testing database. For running the suit of test, just run:
 pytest
 ```
 
+## Access roles
+This API is segmented for being used by 3 different roles: _casting assistant_,
+_casting director_ and _executive producer_.
+
+* The casting assistant assists a casting director in the search of actors & 
+  actresses for different projects.
+* The casting director cast actors and assigns them to movies being produced.
+* The executive producer is the responsible of production of different movies.
+
+The permissions assign to these roles are the following:
+* Casting assistant:
+  * `get:movies`
+  * `get:actors`
+* Casting director:
+  * All the permissions of casting asistant
+  * `post:actors`
+  * `update:actors`
+  * `delete:actors`
+  * `update:movies`
+* Executive producer:
+  * All the permissions of casting director
+  * `post:movies`
+  * `delete:movies`
+
 
 ## License
 All of the files included in this project are covered by the 
