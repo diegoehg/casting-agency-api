@@ -40,6 +40,13 @@ def create_app(test_config=None):
             total_movies=Movie.query.count()
         )
 
+    @app.route('/movies/<int:movie_id>')
+    @requires_auth('get:movies')
+    def get_movie(payload, movie_id):
+        response = Movie.query.get_or_404(movie_id).format()
+        response['success'] = True
+        return jsonify(response)
+
     @app.errorhandler(404)
     def not_found_handler(error):
         return jsonify(
