@@ -131,6 +131,24 @@ def test_404_when_get_movie_unexistent_id(client, token_casting_assistant):
     assert data['message'] == 'Resource not found'
 
 
+def test_get_movie_with_casting_assistant_token(client, token_casting_assistant):
+    response = client.get('/movies/1',
+                          headers=token_casting_assistant)
+    assert response.status_code == 200
+
+
+def test_get_movie_with_casting_director_token(client, token_casting_director):
+    response = client.get('/movies/1',
+                          headers=token_casting_director)
+    assert response.status_code == 200
+
+
+def test_get_movie_with_executive_producer_token(client, token_executive_producer):
+    response = client.get('/movies/1',
+                          headers=token_executive_producer)
+    assert response.status_code == 200
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
