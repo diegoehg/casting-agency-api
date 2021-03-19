@@ -111,6 +111,25 @@ Response example:
 }
 ```
 
+### GET /movies/{movie_id}
+It returns the movie with the specified ID.
+
+* Request arguments: None
+* Response fields:
+  - `success`: boolean value that indicates the request has been successful.
+  - `title`: Title of the movie.
+  - `release_date`: Release date of the movie.
+  
+Response example:
+```json
+{
+  "success": true,
+  "id": 51,
+  "title": "Avengers",
+  "release_date": "2012-03-20"
+}
+```
+
 ## License
 All of the files included in this project are covered by the 
 [MIT License](https://github.com/diegoehg/casting-agency-api/blob/main/LICENSE).
