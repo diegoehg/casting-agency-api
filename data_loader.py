@@ -1,4 +1,4 @@
-from models import Movie
+from models import Movie, Actor
 from datetime import date
 
 
@@ -26,3 +26,27 @@ def load_data():
     Movie("Interstellar", date(2019, 11, 6)).insert()
     Movie("Inception", date(2010, 7, 23)).insert()
     Movie("The Dark Knight", date(2008, 7, 18)).insert()
+
+    Actor("Elliot Page", 30, 'male').insert()
+    Actor("Ellen Green", 28, 'female').insert()
+    Actor("Brad Presley", 53, 'male').insert()
+    Actor("Gina Morello", 42, 'female').insert()
+    Actor("Romeo Tarantello", 22, 'male').insert()
+
+    Actor("Leonardo Da Lima", 45, 'male').insert()
+    Actor("Julia Richards", 33, 'female').insert()
+    Actor("Antonio Margueritti", 65, 'male').insert()
+    Actor("Diana Pratt", 27, 'female').insert()
+    Actor("Don Draper", 43, 'male').insert()
+
+    Actor("Ruth Badger", 65, 'female').insert()
+    Actor("Rick Tracy", 78, 'male').insert()
+    Actor("Sophie Laurent", 42, 'female').insert()
+    Actor("John Raves", 42, 'male').insert()
+    Actor("Megan Reagan", 38, 'female').insert()
+
+    Actor("Juniper Lee", 17, 'female').insert()
+    Actor("Kurt Cornell", 25, 'male').insert()
+    Actor("Vanessa James", 24, 'female').insert()
+    Actor("Ted Russell", 63, 'male').insert()
+    Actor("Olivia Coleman", 40, 'female').insert()
