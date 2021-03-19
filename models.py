@@ -1,6 +1,7 @@
 import os
+import enum
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, Enum
 
 os_database_path = os.environ['DATABASE_URL']
 
@@ -35,4 +36,35 @@ class Movie(db.Model):
             "id": self.id,
             "title": self.title,
             "release_date": self.release_date.isoformat()
+        }
+
+
+class Gender(enum.Enum):
+    male = 'male'
+    female = 'female'
+
+
+class Actor(db.Model):
+    __tablename__ = 'actors'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(Enum(Gender), nullable=False)
+
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = Gender(gender)
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender.value
         }
