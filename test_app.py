@@ -188,6 +188,18 @@ def test_422_in_post_movies_invalid_fields(client, token_executive_producer):
     assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
 
 
+def test_400_in_post_movies_body_malformed(client, token_executive_producer):
+    response = client.post('/movies',
+                           json="Malformed",
+                           headers=token_executive_producer)
+    assert response.status_code == 400
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 400
+    assert data['message'] == 'The server cannot process the request'
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)

@@ -62,6 +62,9 @@ def create_app(test_config=None):
                 movie=m.format()
             ), 201
 
+        except TypeError:
+            abort(400)
+
         except KeyError:
             abort(422)
 
@@ -86,6 +89,14 @@ def create_app(test_config=None):
         response = Actor.query.get_or_404(actor_id).format()
         response['success'] = True
         return jsonify(response)
+
+    @app.errorhandler(400)
+    def malformed_request(error):
+        return jsonify(
+            success=False,
+            error=error.code,
+            message='The server cannot process the request'
+        ), error.code
 
     @app.errorhandler(404)
     def not_found_handler(error):
