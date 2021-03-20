@@ -1,16 +1,14 @@
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
-from models import setup_db, Movie
+from models import setup_db, Movie, Actor
 from auth import requires_auth, AuthException
 
-MOVIES_PER_PAGE = 10
 
-
-def get_paginated_movies(page_number):
-    start_index = (page_number - 1) * MOVIES_PER_PAGE
-    end_index = start_index + MOVIES_PER_PAGE
-    questions_page = Movie.query.order_by(Movie.id).slice(start_index, end_index)
-    return [q.format() for q in questions_page]
+def get_paginated_query(query, ordering_column, page_number=1, rows_by_page=10):
+    start_index = (page_number - 1) * rows_by_page
+    end_index = start_index + rows_by_page
+    rows = query.order_by(ordering_column).slice(start_index, end_index)
+    return [r.format() for r in rows]
 
 
 def create_app(test_config=None):
@@ -29,7 +27,7 @@ def create_app(test_config=None):
     @requires_auth('get:movies')
     def get_movies(payload):
         page_number = request.args.get('page', 1, type=int)
-        movies = get_paginated_movies(page_number)
+        movies = get_paginated_query(Movie.query, Movie.id, page_number)
 
         if len(movies) == 0:
             abort(404)
@@ -46,6 +44,18 @@ def create_app(test_config=None):
         response = Movie.query.get_or_404(movie_id).format()
         response['success'] = True
         return jsonify(response)
+
+    @app.route('/actors')
+    @requires_auth('get:actors')
+    def get_actors(payload):
+        page_number = request.args.get('page', 1, type=int)
+        actors = get_paginated_query(Actor.query, Actor.id, page_number)
+
+        return jsonify(
+            success=True,
+            actors=actors,
+            total_actors=Actor.query.count()
+        )
 
     @app.errorhandler(404)
     def not_found_handler(error):
