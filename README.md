@@ -130,6 +130,80 @@ Response example:
 }
 ```
 
+### GET /actors
+It returns a paginated list of actors & the total number of actors saved in the
+database.
+
+* Request arguments:
+  - `page`: indicate the page number requested (e. g. `/actors=?page=3`)
+* Response fields:
+  - `success`: boolean value that indicates if the request has been succesful.
+  - `actors`: contains a list of actors, at most 10 for every page.
+  - `total_actors`: number of actors included in the database.
+* Permission required: `get:actors`
+
+Response example:
+```json
+{
+  "success": true,
+  "actors": [
+    {
+      "id": 34,
+      "name": "Julia Robertson",
+      "age": 47,
+      "gender": "female"
+    },
+    {
+      "id": 35,
+      "name": "Chris Reeves",
+      "age": 56,
+      "gender": "male"
+    }
+  ],
+  "total_actors": 412
+}
+```
+
+### GET /actors/{actor_id}
+It returns the actor with the specified ID.
+
+* Request arguments: None
+* Response fields:
+  - `success`: boolean value that indicates the request has been successful.
+  - `id`: ID requested.
+  - `name`: Name of the actor.
+  - `age`: Age of the actor.
+  - `gender`: Gender of the actor.
+
+Response example:
+```json
+{
+  "success": true,
+  "id": 320,
+  "name": "Robb Auerbach",
+  "age": 32,
+  "gender": "male"
+}
+```
+
+### Errors response
+In the case of errors, a JSON response is returned.
+
+* Response fields:
+  - `success`: boolean value that indicates the request has successful. In the
+    case of errors, it has a false value.
+  - `error`: HTTP status code (e. g. 404, 401, 500).
+  - `message`: A short description of the error.
+
+Response example:
+```json
+{
+  "success": false,
+  "error": 404,
+  "message": "Resource not found"
+}
+```
+
 ## License
 All of the files included in this project are covered by the 
 [MIT License](https://github.com/diegoehg/casting-agency-api/blob/main/LICENSE).
