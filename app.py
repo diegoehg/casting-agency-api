@@ -25,7 +25,7 @@ def create_app(test_config=None):
 
     @app.route('/movies')
     @requires_auth('get:movies')
-    def get_movies(payload):
+    def get_movies():
         page_number = request.args.get('page', 1, type=int)
         movies = get_paginated_query(Movie.query, Movie.id, page_number)
 
@@ -40,14 +40,14 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>')
     @requires_auth('get:movies')
-    def get_movie(payload, movie_id):
+    def get_movie(movie_id):
         response = Movie.query.get_or_404(movie_id).format()
         response['success'] = True
         return jsonify(response)
 
     @app.route('/actors')
     @requires_auth('get:actors')
-    def get_actors(payload):
+    def get_actors():
         page_number = request.args.get('page', 1, type=int)
         actors = get_paginated_query(Actor.query, Actor.id, page_number)
 
