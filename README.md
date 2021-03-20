@@ -85,13 +85,13 @@ database.
 
 * Request arguments:
   - `page`: indicate the page number requested (e. g. `/movies=?page=3`)
-* Response fields:
+* Response body fields:
   - `success`: boolean value that indicates if the request has been succesful.
   - `movies`: contains a list of movies, at most 10 for every page.
   - `total_movies`: number of movies included in the database.
 * Permission required: `get:movies`
   
-Response example:
+Response body example:
 ```json
 {
   "success": true,
@@ -115,12 +115,13 @@ Response example:
 It returns the movie with the specified ID.
 
 * Request arguments: None
-* Response fields:
+* Response body fields:
   - `success`: boolean value that indicates the request has been successful.
   - `title`: Title of the movie.
   - `release_date`: Release date of the movie.
+* Permission required: `get:movies`
   
-Response example:
+Response body example:
 ```json
 {
   "success": true,
@@ -168,13 +169,13 @@ database.
 
 * Request arguments:
   - `page`: indicate the page number requested (e. g. `/actors=?page=3`)
-* Response fields:
+* Response body fields:
   - `success`: boolean value that indicates if the request has been succesful.
   - `actors`: contains a list of actors, at most 10 for every page.
   - `total_actors`: number of actors included in the database.
 * Permission required: `get:actors`
 
-Response example:
+Response body example:
 ```json
 {
   "success": true,
@@ -200,14 +201,15 @@ Response example:
 It returns the actor with the specified ID.
 
 * Request arguments: None
-* Response fields:
+* Response body fields:
   - `success`: boolean value that indicates the request has been successful.
   - `id`: ID requested.
   - `name`: Name of the actor.
   - `age`: Age of the actor.
   - `gender`: Gender of the actor.
+* Permission required: `get:actors`
 
-Response example:
+Response body example:
 ```json
 {
   "success": true,
@@ -221,13 +223,13 @@ Response example:
 ### Errors response
 In the case of errors, a JSON response is returned.
 
-* Response fields:
+* Response body fields:
   - `success`: boolean value that indicates the request has successful. In the
     case of errors, it has a false value.
   - `error`: HTTP status code (e. g. 404, 401, 500).
   - `message`: A short description of the error.
 
-Response example:
+Response body example:
 ```json
 {
   "success": false,
