@@ -173,6 +173,21 @@ def test_post_movies(client, token_executive_producer):
     assert movie_created['release_date'] == new_movie['release_date']
 
 
+def test_422_in_post_movies_invalid_fields(client, token_executive_producer):
+    malformed_movie = {
+        "titlle": "Fantastic Four"
+    }
+    response = client.post('/movies',
+                           json=malformed_movie,
+                           headers=token_executive_producer)
+    assert response.status_code == 422
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 422
+    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)

@@ -49,17 +49,21 @@ def create_app(test_config=None):
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movies')
     def post_movies():
-        new_movie = request.get_json()
-        m = Movie(
-            new_movie['title'],
-            date.fromisoformat(new_movie['release_date'])
-        )
-        m.insert()
+        try:
+            new_movie = request.get_json()
+            m = Movie(
+                new_movie['title'],
+                date.fromisoformat(new_movie['release_date'])
+            )
+            m.insert()
 
-        return jsonify(
-            success=True,
-            movie=m.format()
-        ), 201
+            return jsonify(
+                success=True,
+                movie=m.format()
+            ), 201
+
+        except KeyError:
+            abort(422)
 
     @app.route('/actors')
     @requires_auth('get:actors')
@@ -89,6 +93,14 @@ def create_app(test_config=None):
             success=False,
             error=error.code,
             message="Resource not found"
+        ), error.code
+
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        return jsonify(
+            success=False,
+            error=error.code,
+            message="The request was well-formed but was unable to be followed due to semantic errors"
         ), error.code
 
     @app.errorhandler(AuthException)
