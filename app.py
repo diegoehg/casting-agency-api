@@ -51,6 +51,9 @@ def create_app(test_config=None):
         page_number = request.args.get('page', 1, type=int)
         actors = get_paginated_query(Actor.query, Actor.id, page_number)
 
+        if len(actors) == 0:
+            abort(404)
+
         return jsonify(
             success=True,
             actors=actors,

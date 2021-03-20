@@ -180,6 +180,19 @@ def test_get_actors_second_page(client, token_casting_assistant):
     assert data['total_actors'] == total_actors
 
 
+def test_404_if_get_actors_unexistent_page(client, token_casting_assistant):
+    response = client.get('/actors',
+                          query_string={'page': 2009},
+                          headers=token_casting_assistant)
+    assert response.status_code == 404
+
+    data = response.get_json()
+
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
