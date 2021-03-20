@@ -60,6 +60,13 @@ def create_app(test_config=None):
             total_actors=Actor.query.count()
         )
 
+    @app.route('/actors/<int:actor_id>')
+    @requires_auth('get:actors')
+    def get_actor(actor_id):
+        response = Actor.query.get_or_404(actor_id).format()
+        response['success'] = True
+        return jsonify(response)
+
     @app.errorhandler(404)
     def not_found_handler(error):
         return jsonify(

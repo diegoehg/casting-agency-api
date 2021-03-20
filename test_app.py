@@ -211,6 +211,21 @@ def test_get_actors_with_executive_producer(client, token_executive_producer):
     assert response.status_code == 200
 
 
+def test_get_actor(client, token_casting_assistant):
+    response = client.get('/actors/1',
+                          headers=token_casting_assistant)
+    assert response.status_code == 200
+
+    actor = Actor.query.get(1)
+    data = response.get_json()
+
+    assert data['success']
+    assert data['id'] == actor.id
+    assert data['name'] == actor.name
+    assert data['age'] == actor.age
+    assert data['gender'] == actor.gender.value
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
