@@ -130,6 +130,38 @@ Response example:
 }
 ```
 
+### POST /movies
+It adds a new movie to the database.
+
+* Request arguments: None.
+* Request body fields:
+  - `title`: Title of the movie.
+  - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
+* Response body fields:
+  - `success`: boolean value that indicates if the request has been successful.
+  - `movie`: JSON object introduced including its generated ID.
+* Permission required: `post:movies`
+  
+Request body example:
+```json
+{
+  "title": "Godzilla vs. King Kong",
+  "release_date": "2021-03-28"
+}
+```
+
+Response body example:
+```json
+{
+  "success": true,
+  "movie": {
+    "id": 436,
+    "title": "Godzilla vs. King Kong",
+    "release_date": "2021-03-28"
+  }
+}
+```
+
 ### GET /actors
 It returns a paginated list of actors & the total number of actors saved in the
 database.
