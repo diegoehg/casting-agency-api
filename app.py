@@ -91,7 +91,7 @@ def create_app(test_config=None):
         return jsonify(response)
 
     @app.errorhandler(400)
-    def malformed_request(error):
+    def malformed_request_handler(error):
         return jsonify(
             success=False,
             error=error.code,
@@ -107,7 +107,7 @@ def create_app(test_config=None):
         ), error.code
 
     @app.errorhandler(422)
-    def unprocessable_entity(error):
+    def unprocessable_entity_handler(error):
         return jsonify(
             success=False,
             error=error.code,
