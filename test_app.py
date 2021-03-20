@@ -53,6 +53,15 @@ def valid_json_new_movie():
     }
 
 
+@pytest.fixture(scope='module')
+def valid_json_new_actor():
+    return {
+        "name": "John Brubeck",
+        "age": 36,
+        "gender": "male"
+    }
+
+
 def test_get_movies_default_page(client, token_casting_assistant):
     response = client.get('/movies',
                           headers=token_casting_assistant)
@@ -336,6 +345,27 @@ def test_get_actor_with_executive_producer(client, token_executive_producer):
     response = client.get('/actors/1',
                           headers=token_executive_producer)
     assert response.status_code == 200
+
+
+def test_post_actors(client, valid_json_new_actor, token_casting_director):
+    total_actors_before_post = Actor.query.count()
+
+    response = client.post('/actors',
+                           json=valid_json_new_actor,
+                           headers=token_casting_director)
+    assert response.status_code == 201
+
+    total_actors_after_post = Actor.query.count()
+    assert total_actors_before_post+1 == total_actors_after_post
+
+    data = response.get_json()
+    assert data['success']
+
+    actor_created = data['actor']
+    assert actor_created['id'] is not None
+    assert actor_created['name'] == valid_json_new_actor['name']
+    assert actor_created['age'] == valid_json_new_actor['age']
+    assert actor_created['gender'] == valid_json_new_actor['gender']
 
 
 def test_401_when_request_does_not_contain_authorization_header(client):
