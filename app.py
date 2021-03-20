@@ -63,6 +63,7 @@ def create_app(test_config=None):
             ), 201
 
         except TypeError:
+            db.session.rollback()
             abort(400)
 
         except KeyError:
@@ -107,6 +108,10 @@ def create_app(test_config=None):
                 success=True,
                 actor=a.format()
             ), 201
+
+        except TypeError:
+            db.session.rollback()
+            abort(400)
 
         except KeyError:
             db.session.rollback()
