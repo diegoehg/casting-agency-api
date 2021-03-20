@@ -368,6 +368,22 @@ def test_post_actors(client, valid_json_new_actor, token_casting_director):
     assert actor_created['gender'] == valid_json_new_actor['gender']
 
 
+def test_422_in_post_actors_invalid_fields(client, token_executive_producer):
+    malformed_actor = {
+        "name": "Fantastic Four",
+        "aaage": 74
+    }
+    response = client.post('/actors',
+                           json=malformed_actor,
+                           headers=token_executive_producer)
+    assert response.status_code == 422
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 422
+    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401

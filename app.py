@@ -1,7 +1,7 @@
 from datetime import date
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
-from models import setup_db, Movie, Actor, Gender
+from models import setup_db, db, Movie, Actor, Gender
 from auth import requires_auth, AuthException
 
 
@@ -66,6 +66,7 @@ def create_app(test_config=None):
             abort(400)
 
         except KeyError:
+            db.session.rollback()
             abort(422)
 
     @app.route('/actors')
@@ -93,18 +94,23 @@ def create_app(test_config=None):
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actors')
     def post_actors():
-        new_actor = request.get_json()
-        a = Actor(
-            new_actor['name'],
-            new_actor['age'],
-            Gender(new_actor['gender'])
-        )
-        a.insert()
+        try:
+            new_actor = request.get_json()
+            a = Actor(
+                new_actor['name'],
+                new_actor['age'],
+                Gender(new_actor['gender'])
+            )
+            a.insert()
 
-        return jsonify(
-            success=True,
-            actor=a.format()
-        ), 201
+            return jsonify(
+                success=True,
+                actor=a.format()
+            ), 201
+
+        except KeyError:
+            db.session.rollback()
+            abort(422)
 
     @app.errorhandler(400)
     def malformed_request_handler(error):
