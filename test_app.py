@@ -226,6 +226,18 @@ def test_get_actor(client, token_casting_assistant):
     assert data['gender'] == actor.gender.value
 
 
+def test_404_when_get_actor_unexistent_id(client, token_casting_assistant):
+    response = client.get('/actors/9000',
+                          headers=token_casting_assistant)
+    assert response.status_code == 404
+
+    data = response.get_json()
+
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
