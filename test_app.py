@@ -45,6 +45,14 @@ def token_executive_producer():
     yield get_authorization_header("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IllKTHRSdUJFM1QxVXVNR0VkTWdaeCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iYWxpYW4udXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwNTJiNDY2MjYyNjFhMDA2ZmE5MGJhOSIsImF1ZCI6ImNhc3RpbmctYWdlbmN5LWF1dGgtYXBpIiwiaWF0IjoxNjE2MjExMTE0LCJleHAiOjE2MTYyOTc1MTQsImF6cCI6Ik9yQTZkRFZiVmVYZ01YQkFsVHFuWHI4UE9RU2MyYVY4Iiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6bW92aWVzIiwicG9zdDphY3RvcnMiLCJwb3N0Om1vdmllcyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIl19.NXU80E4esWCP0snSFKFh5850h_Oq6GhTSwHwdIXhaFMk4zfZ9II_mr69eVkrxtJBgH7P962iVc-MvX0vWYRuVV2NF6-bYUCzfmPuQEToD92yy89Wjm5J9DqCI5LjRvqYW1kiT7oICfJkLS2aKJlvDVkoqKRhAHXPklOtSOTjaNxWrvSEbIPC8t3SRHEelXc4CIBRUWPxEKcoOQbmvrgTUvzXB_PeS8j8DG_gfmmsKgCc85IJcUD-t0p1xLBtyvDN1EPKmTej83H8hx38zS8JvcfH4-WjpOfyBnDe0ccssF6s9g7rJwZa-IYpF2xWCSrHDEGcqQBWtzfmM-_2ligFTw")
 
 
+@pytest.fixture(scope='module')
+def valid_json_new_movie():
+    return {
+        "title": "Godzilla vs. King Kong",
+        "release_date": "2021-07-23"
+    }
+
+
 def test_get_movies_default_page(client, token_casting_assistant):
     response = client.get('/movies',
                           headers=token_casting_assistant)
@@ -149,15 +157,11 @@ def test_get_movie_with_executive_producer_token(client, token_executive_produce
     assert response.status_code == 200
 
 
-def test_post_movies(client, token_executive_producer):
-    new_movie = {
-        "title": "Godzilla vs. King Kong",
-        "release_date": "2021-07-23"
-    }
+def test_post_movies(client, valid_json_new_movie, token_executive_producer):
     total_movies_before_post = Movie.query.count()
 
     response = client.post('/movies',
-                           json=new_movie,
+                           json=valid_json_new_movie,
                            headers=token_executive_producer)
     assert response.status_code == 201
 
@@ -169,8 +173,8 @@ def test_post_movies(client, token_executive_producer):
 
     movie_created = data['movie']
     assert movie_created['id'] is not None
-    assert movie_created['title'] == new_movie['title']
-    assert movie_created['release_date'] == new_movie['release_date']
+    assert movie_created['title'] == valid_json_new_movie['title']
+    assert movie_created['release_date'] == valid_json_new_movie['release_date']
 
 
 def test_422_in_post_movies_invalid_fields(client, token_executive_producer):
@@ -198,6 +202,33 @@ def test_400_in_post_movies_body_malformed(client, token_executive_producer):
     assert not data['success']
     assert data['error'] == 400
     assert data['message'] == 'The server cannot process the request'
+
+
+def test_authorized_post_movies_with_executive_producer(client,
+                                                        valid_json_new_movie,
+                                                        token_executive_producer):
+    response = client.post('/movies',
+                           json=valid_json_new_movie,
+                           headers=token_executive_producer)
+    assert response.status_code == 201
+
+
+def test_401_post_movies_with_casting_assistant(client,
+                                                valid_json_new_movie,
+                                                token_casting_assistant):
+    response = client.post('/movies',
+                           json=valid_json_new_movie,
+                           headers=token_casting_assistant)
+    assert response.status_code == 401
+
+
+def test_401_post_movies_with_casting_director(client,
+                                               valid_json_new_movie,
+                                               token_casting_director):
+    response = client.post('/movies',
+                           json=valid_json_new_movie,
+                           headers=token_casting_director)
+    assert response.status_code == 401
 
 
 def test_get_actors_default_page(client, token_casting_assistant):
