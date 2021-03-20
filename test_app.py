@@ -396,6 +396,33 @@ def test_400_in_post_actors_body_malformed(client, token_casting_director):
     assert data['message'] == 'The server cannot process the request'
 
 
+def test_authorized_post_actors_with_casting_director(client,
+                                                      valid_json_new_actor,
+                                                      token_casting_director):
+    response = client.post('/actors',
+                           json=valid_json_new_actor,
+                           headers=token_casting_director)
+    assert response.status_code == 201
+
+
+def test_authorized_post_actors_with_executive_producer(client,
+                                                        valid_json_new_actor,
+                                                        token_executive_producer):
+    response = client.post('/actors',
+                           json=valid_json_new_actor,
+                           headers=token_executive_producer)
+    assert response.status_code == 201
+
+
+def test_401_post_actors_with_casting_assistant(client,
+                                                valid_json_new_actor,
+                                                token_casting_assistant):
+    response = client.post('/actors',
+                           json=valid_json_new_actor,
+                           headers=token_casting_assistant)
+    assert response.status_code == 401
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
