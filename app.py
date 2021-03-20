@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from models import setup_db, Movie, Actor
@@ -44,6 +45,21 @@ def create_app(test_config=None):
         response = Movie.query.get_or_404(movie_id).format()
         response['success'] = True
         return jsonify(response)
+
+    @app.route('/movies', methods=['POST'])
+    @requires_auth('post:movies')
+    def post_movies():
+        new_movie = request.get_json()
+        m = Movie(
+            new_movie['title'],
+            date.fromisoformat(new_movie['release_date'])
+        )
+        m.insert()
+
+        return jsonify(
+            success=True,
+            movie=m.format()
+        ), 201
 
     @app.route('/actors')
     @requires_auth('get:actors')

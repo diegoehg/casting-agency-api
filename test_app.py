@@ -149,6 +149,30 @@ def test_get_movie_with_executive_producer_token(client, token_executive_produce
     assert response.status_code == 200
 
 
+def test_post_movies(client, token_executive_producer):
+    new_movie = {
+        "title": "Godzilla vs. King Kong",
+        "release_date": "2021-07-23"
+    }
+    total_movies_before_post = Movie.query.count()
+
+    response = client.post('/movies',
+                           json=new_movie,
+                           headers=token_executive_producer)
+    assert response.status_code == 201
+
+    total_movies_after_post = Movie.query.count()
+    assert total_movies_before_post + 1 == total_movies_after_post
+
+    data = response.get_json()
+    assert data['success']
+
+    movie_created = data['movie']
+    assert movie_created['id'] is not None
+    assert movie_created['title'] == new_movie['title']
+    assert movie_created['release_date'] == new_movie['release_date']
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
