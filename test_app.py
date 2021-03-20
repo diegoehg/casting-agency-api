@@ -164,6 +164,22 @@ def test_get_actors_default_page(client, token_casting_assistant):
     assert data['total_actors'] == total_actors
 
 
+def test_get_actors_second_page(client, token_casting_assistant):
+    response = client.get('/actors',
+                          query_string={'page': 2},
+                          headers=token_casting_assistant)
+    assert response.status_code == 200
+
+    actors = [a.format() for a in Actor.query.order_by(Actor.id).slice(10, 20)]
+    total_actors = Actor.query.count()
+
+    data = response.get_json()
+
+    assert data['success']
+    assert data['actors'] == actors
+    assert data['total_actors'] == total_actors
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
