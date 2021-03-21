@@ -524,6 +524,17 @@ def test_delete_actor(client, token_header, role, actor_id):
     assert data['success']
 
 
+@pytest.mark.parametrize(
+    "role, actor_id",
+    [("casting_director", 1900),
+     ("executive_producer", 2020)]
+)
+def test_404_delete_actor_with_non_existent_id(client, token_header, role, actor_id):
+    response = client.delete(f'/actors/{actor_id}',
+                             headers=token_header[role])
+    verifies_404_response(response)
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
