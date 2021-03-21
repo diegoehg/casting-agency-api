@@ -343,6 +343,20 @@ Response body example:
 }
 ```
 
+### DELETE /actors/{actor_id}
+It deletes the actor with the specified ID.
+
+* Response body fields:
+  - `success`: boolean value that indicates the request has been successful.
+* Permission required: `delete:actors`
+
+Response body example:
+```json
+{
+  "success": true,
+}
+```
+
 ### Errors response
 In the case of errors, a JSON response is returned.
 
