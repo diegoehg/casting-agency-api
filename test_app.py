@@ -195,18 +195,18 @@ def test_401_post_movies_with_unauthorized_roles(client, token_header, role):
 
 
 @pytest.mark.parametrize(
-    "role, new_release_date",
-    [
-        ('casting_director', "2021-03-19"),
-        ('executive_producer', "2022-03-19")
-    ]
+    "role, field_patched, new_value, movie_id",
+    [('casting_director', 'release_date', "2021-03-19", 3),
+     ('executive_producer', 'release_date', "2022-03-19", 4),
+     ('casting_director', 'title', 'Fortitude of Solitude', 5),
+     ('executive_producer', 'title', 'Captain Puerto Rico', 6)]
 )
-def test_patch_movie(client, token_header, role, new_release_date):
+def test_patch_movie(client, token_header, role, field_patched, new_value, movie_id):
     patch_body = {
-        "release_date": new_release_date
+        field_patched: new_value
     }
-    movie_before_patch = Movie.query.get(3).format()
-    response = client.patch('/movies/3',
+    movie_before_patch = Movie.query.get(movie_id).format()
+    response = client.patch(f'/movies/{movie_id}',
                             json=patch_body,
                             headers=token_header[role])
     assert response.status_code == 200
@@ -215,9 +215,12 @@ def test_patch_movie(client, token_header, role, new_release_date):
     assert data['success']
 
     movie_after_patch = data['movie']
-    assert movie_after_patch['title'] == movie_before_patch['title']
-    assert movie_after_patch['release_date'] != movie_before_patch['release_date']
-    assert movie_after_patch['release_date'] == patch_body['release_date']
+    for field, value in movie_after_patch.items():
+        if field == field_patched:
+            assert value != movie_before_patch[field]
+            assert value == patch_body[field]
+        else:
+            assert value == movie_after_patch[field]
 
 
 @pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
