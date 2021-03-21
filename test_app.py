@@ -47,6 +47,15 @@ def verifies_400_response(response):
     assert data['message'] == 'The server cannot process the request'
 
 
+def verifies_401_lack_of_permissions(response):
+    assert response.status_code == 401
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 401
+    assert data['message'] == 'Permission not found in JWT'
+
+
 def verifies_404_response(response):
     assert response.status_code == 404
 
@@ -198,7 +207,7 @@ def test_401_post_movies_with_unauthorized_roles(client, token_header, role):
     response = client.post('/movies',
                            json=new_movie,
                            headers=token_header[role])
-    assert response.status_code == 401
+    verifies_401_lack_of_permissions(response)
 
 
 @pytest.mark.parametrize(
@@ -259,7 +268,7 @@ def test_401_int_patch_movie_unauthorized_role(client, token_header, role):
     response = client.patch('/movies/5',
                             json={'release_date': '2023-04-23'},
                             headers=token_header[role])
-    assert response.status_code == 401
+    verifies_401_lack_of_permissions(response)
 
 
 @pytest.mark.parametrize(
@@ -400,7 +409,7 @@ def test_401_post_actors_with_unauthorized_roles(client, token_header, role):
     response = client.post('/actors',
                            json=new_actor,
                            headers=token_header[role])
-    assert response.status_code == 401
+    verifies_401_lack_of_permissions(response)
 
 
 @pytest.mark.parametrize(
