@@ -38,6 +38,15 @@ def token_header():
     }
 
 
+def verifies_404_response(response):
+    assert response.status_code == 404
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
+
+
 @pytest.mark.parametrize(
     "role",
     ['casting_assistant', 'casting_director', 'executive_producer']
@@ -85,12 +94,7 @@ def test_404_in_get_movies_unexistent_page(client, token_header, role):
     response = client.get('/movies',
                           query_string={'page': 2000},
                           headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 @pytest.mark.parametrize(
@@ -120,12 +124,7 @@ def test_get_movie(client, token_header, role):
 def test_404_when_get_movie_unexistent_id(client, token_header, role):
     response = client.get('/movies/8484958',
                           headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 @pytest.mark.parametrize("role", ['executive_producer'])
@@ -228,13 +227,7 @@ def test_404_in_patch_movie_unexistent_id(client, token_header, role):
     response = client.patch('/movies/949489',
                             json={"title": "Titanic 2"},
                             headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
@@ -318,13 +311,7 @@ def test_404_if_get_actors_unexistent_page(client, token_header, role):
     response = client.get('/actors',
                           query_string={'page': 2009},
                           headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 @pytest.mark.parametrize(
@@ -355,13 +342,7 @@ def test_get_actor(client, token_header, role):
 def test_404_when_get_actor_unexistent_id(client, token_header, role):
     response = client.get('/actors/9000',
                           headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
@@ -471,13 +452,7 @@ def test_404_in_patch_actor_unexistent_id(client, token_header, role):
     response = client.patch('/actors/111021',
                             json={"name": "Romeo Bautista"},
                             headers=token_header[role])
-    assert response.status_code == 404
-
-    data = response.get_json()
-
-    assert not data['success']
-    assert data['error'] == 404
-    assert data['message'] == 'Resource not found'
+    verifies_404_response(response)
 
 
 def test_401_when_request_does_not_contain_authorization_header(client):
