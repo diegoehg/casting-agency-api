@@ -38,6 +38,15 @@ def token_header():
     }
 
 
+def verifies_400_response(response):
+    assert response.status_code == 400
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 400
+    assert data['message'] == 'The server cannot process the request'
+
+
 def verifies_404_response(response):
     assert response.status_code == 404
 
@@ -177,12 +186,7 @@ def test_400_in_post_movies_body_malformed(client, token_header, role):
     response = client.post('/movies',
                            json="Malformed",
                            headers=token_header[role])
-    assert response.status_code == 400
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 400
-    assert data['message'] == 'The server cannot process the request'
+    verifies_400_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_assistant', 'casting_director'])
@@ -247,12 +251,7 @@ def test_400_in_patch_movie_malformed_request(client, token_header, role):
     response = client.patch('/movies/1',
                             json="Malformed request",
                             headers=token_header[role])
-    assert response.status_code == 400
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 400
-    assert data['message'] == 'The server cannot process the request'
+    verifies_400_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_assistant'])
@@ -388,12 +387,7 @@ def test_400_in_post_actors_body_malformed(client, token_header, role):
     response = client.post('/actors',
                            json="request body malformed",
                            headers=token_header[role])
-    assert response.status_code == 400
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 400
-    assert data['message'] == 'The server cannot process the request'
+    verifies_400_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_assistant'])
