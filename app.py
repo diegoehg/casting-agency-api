@@ -216,6 +216,14 @@ def create_app(test_config=None):
             message="The request was well-formed but was unable to be followed due to semantic errors"
         ), error.code
 
+    @app.errorhandler(500)
+    def internal_server_error_handler(error):
+        return jsonify(
+            success=False,
+            error=error.code,
+            message="Internal server error"
+        ), error.code
+
     @app.errorhandler(AuthException)
     def authorization_exception_handler(exception):
         return jsonify(
