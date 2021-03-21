@@ -308,6 +308,22 @@ def test_422_in_patch_movie_invalid_fields(client, token):
     assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
 
 
+@pytest.mark.parametrize(
+    "token",
+    [token_header['casting_director'], token_header['executive_producer']]
+)
+def test_400_in_patch_movie_malformed_request(client, token):
+    response = client.patch('/movies/1',
+                            json="Malformed request",
+                            headers=token)
+    assert response.status_code == 400
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 400
+    assert data['message'] == 'The server cannot process the request'
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
