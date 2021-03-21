@@ -75,7 +75,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('update:movies')
-    def patch_actor(movie_id):
+    def patch_movie(movie_id):
         m = Movie.query.get_or_404(movie_id)
         patch_data = request.get_json()
 
@@ -147,6 +147,28 @@ def create_app(test_config=None):
         except KeyError:
             db.session.rollback()
             abort(422)
+
+    @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+    @requires_auth('update:actors')
+    def patch_actor(actor_id):
+        a = Actor.query.get_or_404(actor_id)
+        patch_data = request.get_json()
+
+        if 'name' in patch_data:
+            a.name = patch_data['name']
+
+        if 'age' in patch_data:
+            a.age = patch_data['age']
+
+        if 'gender' in patch_data:
+            a.gender = Gender(patch_data['gender'])
+
+        a.update()
+
+        return jsonify(
+            success=True,
+            actor=a.format()
+        )
 
     @app.errorhandler(400)
     def malformed_request_handler(error):

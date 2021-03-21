@@ -431,6 +431,38 @@ def test_401_post_actors_with_unauthorized_roles(client, token_header, role):
     assert response.status_code == 401
 
 
+@pytest.mark.parametrize(
+    "role, field_patched, new_value, actor_id",
+    [("casting_director", "name", "Yukio Mishima", 3),
+     ("executive_producer", "name", "Robbie Reiss", 4),
+     ("casting_director", "age", 20, 5),
+     ("executive_producer", "age", 67, 6),
+     ("casting_director", "gender", "male", 7),
+     ("executive_producer", "gender", "female", 8)]
+)
+def test_patch_actor(client, token_header, role, field_patched, new_value, actor_id):
+    actor_before_patch = Actor.query.get(actor_id).format()
+    patch_actor = {
+        field_patched: new_value
+    }
+
+    response = client.patch(f'/actors/{actor_id}',
+                            json=patch_actor,
+                            headers=token_header[role])
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['success']
+
+    actor_after_patch = data['actor']
+    for field, value in actor_after_patch.items():
+        if field == field_patched:
+            assert value != actor_before_patch[field]
+            assert value == patch_actor[field]
+        else:
+            assert value == actor_before_patch[field]
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
