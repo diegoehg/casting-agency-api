@@ -114,7 +114,6 @@ Response body example:
 ### GET /movies/{movie_id}
 It returns the movie with the specified ID.
 
-* Request arguments: None
 * Response body fields:
   - `success`: boolean value that indicates the request has been successful.
   - `title`: Title of the movie.
@@ -134,7 +133,6 @@ Response body example:
 ### POST /movies
 It adds a new movie to the database.
 
-* Request arguments: None.
 * Request body fields:
   - `title`: Title of the movie.
   - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
@@ -200,7 +198,6 @@ Response body example:
 ### GET /actors/{actor_id}
 It returns the actor with the specified ID.
 
-* Request arguments: None
 * Response body fields:
   - `success`: boolean value that indicates the request has been successful.
   - `id`: ID requested.
