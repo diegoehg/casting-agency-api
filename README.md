@@ -140,7 +140,7 @@ It adds a new movie to the database.
   - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
 * Response body fields:
   - `success`: boolean value that indicates if the request has been successful.
-  - `movie`: JSON object introduced including its generated ID.
+  - `movie`: JSON object with same fields of request body plus a generated ID.
 * Permission required: `post:movies`
   
 Request body example:
@@ -217,6 +217,41 @@ Response body example:
   "name": "Robb Auerbach",
   "age": 32,
   "gender": "male"
+}
+```
+
+### POST /actors
+It adds a new actor to the database.
+
+* Request body fields:
+  - `name`: Name of the actor.
+  - `age`: Age of the actor.
+  - `gender`: A string indicating the gender of the actor. Just two strings
+    are allowed: `male` or `female`.
+* Response body fields:
+  - `success`: boolean value that indicates if the request has been successful.
+  - `actor`: JSON object with same fields of request body plus a generated ID.
+* Permission required: `post:actors`
+
+Request body example:
+```json
+{
+  "name": "Armin Arlett",
+  "age": 18,
+  "gender": "male"
+}
+```
+
+Response body example:
+```json
+{
+  "success": true,
+  "actor": {
+    "id": 302,
+    "name": "Armin Arlett",
+    "age": 18,
+    "gender": "male"
+  }
 }
 ```
 
