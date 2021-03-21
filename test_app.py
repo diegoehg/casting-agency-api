@@ -285,6 +285,16 @@ def test_delete_movie(client, token_header, role, movie_id):
 
 
 @pytest.mark.parametrize(
+    "role, movie_id",
+    [("executive_producer", 2000)]
+)
+def test_404_delete_movie_with_non_existent_id(client, token_header, role, movie_id):
+    response = client.delete(f'/movies/{movie_id}',
+                             headers=token_header[role])
+    verifies_404_response(response)
+
+
+@pytest.mark.parametrize(
     "role",
     ['casting_assistant', 'casting_director', 'executive_producer']
 )
