@@ -324,6 +324,14 @@ def test_400_in_patch_movie_malformed_request(client, token):
     assert data['message'] == 'The server cannot process the request'
 
 
+@pytest.mark.parametrize("token", [token_header['casting_assistant']])
+def test_401_int_patch_movie_unauthorized_token(client, token):
+    response = client.patch('/movies/5',
+                            json={'release_date': '2023-04-23'},
+                            headers=token)
+    assert response.status_code == 401
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
