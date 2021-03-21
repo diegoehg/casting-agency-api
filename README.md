@@ -292,6 +292,43 @@ Response body example:
 }
 ```
 
+### PATCH /actors/{actor_id}
+It updates the indicated fields of an existent actor.
+
+The request body can have one of the actor fields, or all of them. This endpoint
+will update just the fields passed.
+
+* Request body fields:
+  - `name`: Name of the actor.
+  - `age`: Age of the actor.
+  - `gender`: Gender of the actor. As in the POST /actors endpoint, it just
+  accepts two values: `male` or `female`.
+* Response body fields:
+  - `success`: boolean value that indicates if the request has been successful.
+  - `actor`: JSON object with requested actor data, including the updated fields.
+* Permission required: `update:actors`
+
+Request body example:
+```json
+{
+  "name": "John Wock",
+  "age": 58
+}
+```
+
+Response body example:
+```json
+{
+  "success": true,
+  "actor": {
+    "id": 436,
+    "name": "John Wock",
+    "age": 58,
+    "gender": "male"
+  }
+}
+```
+
 ### Errors response
 In the case of errors, a JSON response is returned.
 
