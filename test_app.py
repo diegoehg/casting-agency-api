@@ -261,7 +261,7 @@ def test_400_in_patch_movie_malformed_request(client, token_header, role):
 
 
 @pytest.mark.parametrize("role", ['casting_assistant'])
-def test_401_int_patch_movie_unauthorized_token(client, token_header, role):
+def test_401_int_patch_movie_unauthorized_role(client, token_header, role):
     response = client.patch('/movies/5',
                             json={'release_date': '2023-04-23'},
                             headers=token_header[role])
