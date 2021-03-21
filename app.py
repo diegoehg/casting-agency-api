@@ -79,6 +79,9 @@ def create_app(test_config=None):
         m = Movie.query.get_or_404(movie_id)
         patch_data = request.get_json()
 
+        if 'title' not in patch_data and 'release_date' not in patch_data:
+            abort(422)
+
         if 'title' in patch_data:
             m.title = patch_data['title']
 

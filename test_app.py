@@ -292,6 +292,22 @@ def test_404_in_patch_movie_unexistent_id(client, token):
     assert data['message'] == 'Resource not found'
 
 
+@pytest.mark.parametrize(
+    "token",
+    [token_header['casting_director'], token_header['executive_producer']]
+)
+def test_422_in_patch_movie_invalid_fields(client, token):
+    response = client.patch('/movies/5',
+                            json={"tittle": "Titanic 3"},
+                            headers=token)
+    assert response.status_code == 422
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 422
+    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
