@@ -19,9 +19,9 @@ It is recommended to do it in a virtual environment,
 ## Running the API
 
 ### Enviroment variables
-Before running the app, some environment variables should be set for
+Before running the app, some environment variables should be set up for
 its correct execution. These variables are related with SQLAlchemy & Auth0
-settings. Be aware to include them in the environment where you run this app:
+settings. Be sure to include them in the environment where you run this app:
 
 * `DATABASE_URL`: contains the configuration for connecting to the database.
 [Follow the SQLAlchemy guide for composing this URL](https://docs.sqlalchemy.org/en/latest/core/engines.html?highlight=create_engine#database-urls).
@@ -62,18 +62,18 @@ _casting director_ and _executive producer_.
 * The casting director cast actors and assigns them to movies being produced.
 * The executive producer is the responsible of production of different movies.
 
-The permissions assign to these roles are the following:
+The permissions assigned to these roles are the following:
 * Casting assistant:
   * `get:movies`
   * `get:actors`
 * Casting director:
-  * All the permissions of casting asistant
+  * All the permissions of a casting asistant
   * `post:actors`
   * `update:actors`
   * `delete:actors`
   * `update:movies`
 * Executive producer:
-  * All the permissions of casting director
+  * All the permissions of a casting director
   * `post:movies`
   * `delete:movies`
 
@@ -208,7 +208,7 @@ It deletes the movie with the specified ID.
 Response body example:
 ```json
 {
-  "success": true,
+  "success": true
 }
 ```
 
@@ -353,7 +353,7 @@ It deletes the actor with the specified ID.
 Response body example:
 ```json
 {
-  "success": true,
+  "success": true
 }
 ```
 
