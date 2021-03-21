@@ -132,9 +132,11 @@ def test_get_movie(client, token_casting_assistant):
 
     data = response.get_json()
     assert data['success']
-    assert data['id'] == m.id
-    assert data['title'] == m.title
-    assert data['release_date'] == m.release_date.isoformat()
+
+    movie = data['movie']
+    assert movie['id'] == m.id
+    assert movie['title'] == m.title
+    assert movie['release_date'] == m.release_date.isoformat()
 
 
 def test_404_when_get_movie_unexistent_id(client, token_casting_assistant):

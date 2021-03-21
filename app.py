@@ -42,9 +42,12 @@ def create_app(test_config=None):
     @app.route('/movies/<int:movie_id>')
     @requires_auth('get:movies')
     def get_movie(movie_id):
-        response = Movie.query.get_or_404(movie_id).format()
-        response['success'] = True
-        return jsonify(response)
+        m = Movie.query.get_or_404(movie_id)
+
+        return jsonify(
+            success=True,
+            movie=m.format()
+        )
 
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movies')

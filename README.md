@@ -116,17 +116,21 @@ It returns the movie with the specified ID.
 
 * Response body fields:
   - `success`: boolean value that indicates the request has been successful.
-  - `title`: Title of the movie.
-  - `release_date`: Release date of the movie.
+  - `movie`: JSON object with the following fields:
+    - `id`: ID of the movie.
+    - `title`: Title of the movie.
+    - `release_date`: Release date of the movie.
 * Permission required: `get:movies`
   
 Response body example:
 ```json
 {
   "success": true,
-  "id": 51,
-  "title": "Avengers",
-  "release_date": "2012-03-20"
+  "movie": {
+    "id": 51,
+    "title": "Avengers",
+    "release_date": "2012-03-20"
+  }
 }
 ```
 
