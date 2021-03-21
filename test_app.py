@@ -452,6 +452,14 @@ def test_404_in_patch_actor_unexistent_id(client, token_header, role):
     verifies_404_response(response)
 
 
+@pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
+def test_422_in_patch_actor_invalid_fields(client, token_header, role):
+    response = client.patch('/actors/5',
+                            json={"aaage": "Titanic 3"},
+                            headers=token_header[role])
+    verifies_422_response(response)
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401

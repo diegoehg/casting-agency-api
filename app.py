@@ -154,6 +154,10 @@ def create_app(test_config=None):
         a = Actor.query.get_or_404(actor_id)
         patch_data = request.get_json()
 
+        if 'name' not in patch_data and 'age' not in patch_data \
+                and 'gender' not in patch_data:
+            abort(422)
+
         if 'name' in patch_data:
             a.name = patch_data['name']
 
