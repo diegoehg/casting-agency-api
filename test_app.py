@@ -275,6 +275,23 @@ def test_patch_movie(client, token, new_release_date):
     assert movie_after_patch['release_date'] == patch_body['release_date']
 
 
+@pytest.mark.parametrize(
+    "token",
+    [token_header['casting_director'], token_header['executive_producer']]
+)
+def test_404_in_patch_movie_unexistent_id(client, token):
+    response = client.patch('/movies/949489',
+                            json={"title": "Titanic 2"},
+                            headers=token)
+    assert response.status_code == 404
+
+    data = response.get_json()
+
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
