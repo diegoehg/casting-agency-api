@@ -204,20 +204,23 @@ It returns the actor with the specified ID.
 
 * Response body fields:
   - `success`: boolean value that indicates the request has been successful.
-  - `id`: ID requested.
-  - `name`: Name of the actor.
-  - `age`: Age of the actor.
-  - `gender`: Gender of the actor.
+  - `actor`: JSON object with the following fields:
+    - `id`: ID of the actor.
+    - `name`: Name of the actor.
+    - `age`: Age of the actor.
+    - `gender`: Gender of the actor.
 * Permission required: `get:actors`
 
 Response body example:
 ```json
 {
   "success": true,
-  "id": 320,
-  "name": "Robb Auerbach",
-  "age": 32,
-  "gender": "male"
+  "actor": {
+    "id": 320,
+    "name": "Robb Auerbach",
+    "age": 32,
+    "gender": "male"
+  }
 }
 ```
 

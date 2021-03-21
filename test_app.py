@@ -309,14 +309,16 @@ def test_get_actor(client, token_casting_assistant):
                           headers=token_casting_assistant)
     assert response.status_code == 200
 
-    actor = Actor.query.get(1)
+    a = Actor.query.get(1)
     data = response.get_json()
 
     assert data['success']
-    assert data['id'] == actor.id
-    assert data['name'] == actor.name
-    assert data['age'] == actor.age
-    assert data['gender'] == actor.gender.value
+
+    actor = data['actor']
+    assert actor['id'] == a.id
+    assert actor['name'] == a.name
+    assert actor['age'] == a.age
+    assert actor['gender'] == a.gender.value
 
 
 def test_404_when_get_actor_unexistent_id(client, token_casting_assistant):

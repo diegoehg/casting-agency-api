@@ -91,9 +91,12 @@ def create_app(test_config=None):
     @app.route('/actors/<int:actor_id>')
     @requires_auth('get:actors')
     def get_actor(actor_id):
-        response = Actor.query.get_or_404(actor_id).format()
-        response['success'] = True
-        return jsonify(response)
+        a = Actor.query.get_or_404(actor_id)
+
+        return jsonify(
+            success=True,
+            actor=a.format()
+        )
 
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actors')
