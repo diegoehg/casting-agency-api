@@ -165,6 +165,39 @@ Response body example:
 }
 ```
 
+### PATCH /movies/{movie_id}
+It updates the indicated fields of an existent movie.
+
+The request body can have one of the movie fields, or both. This endpoint will
+update just the fields passed.
+
+* Request body fields:
+  - `title`: Title of the movie.
+  - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
+* Response body fields:
+  - `success`: boolean value that indicates if the request has been successful.
+  - `movie`: JSON object with requested movie data, including the updated field.
+* Permission required: `update:movies`
+
+Request body example:
+```json
+{
+  "title": "Suspirium"
+}
+```
+
+Response body example:
+```json
+{
+  "success": true,
+  "movie": {
+    "id": 436,
+    "title": "Suspirium",
+    "release_date": "2021-03-28"
+  }
+}
+```
+
 ### GET /actors
 It returns a paginated list of actors & the total number of actors saved in the
 database.
