@@ -466,6 +466,20 @@ def test_patch_actor(client, token_header, role, field_patched, new_value, actor
             assert value == actor_before_patch[field]
 
 
+@pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
+def test_404_in_patch_actor_unexistent_id(client, token_header, role):
+    response = client.patch('/actors/111021',
+                            json={"name": "Romeo Bautista"},
+                            headers=token_header[role])
+    assert response.status_code == 404
+
+    data = response.get_json()
+
+    assert not data['success']
+    assert data['error'] == 404
+    assert data['message'] == 'Resource not found'
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
