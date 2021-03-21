@@ -295,6 +295,17 @@ def test_404_delete_movie_with_non_existent_id(client, token_header, role, movie
 
 
 @pytest.mark.parametrize(
+    "role, movie_id",
+    [("casting_assistant", 19),
+     ("casting_director", 18)]
+)
+def test_401_delete_movie_with_unauthorized_roles(client, token_header, role, movie_id):
+    response = client.delete(f'/movies/{movie_id}',
+                             headers=token_header[role])
+    verifies_401_lack_of_permissions(response)
+
+
+@pytest.mark.parametrize(
     "role",
     ['casting_assistant', 'casting_director', 'executive_producer']
 )
