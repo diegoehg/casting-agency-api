@@ -47,6 +47,15 @@ def verifies_404_response(response):
     assert data['message'] == 'Resource not found'
 
 
+def verifies_422_response(response):
+    assert response.status_code == 422
+
+    data = response.get_json()
+    assert not data['success']
+    assert data['error'] == 422
+    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+
+
 @pytest.mark.parametrize(
     "role",
     ['casting_assistant', 'casting_director', 'executive_producer']
@@ -160,12 +169,7 @@ def test_422_in_post_movies_invalid_fields(client, token_header, role):
     response = client.post('/movies',
                            json=malformed_movie,
                            headers=token_header[role])
-    assert response.status_code == 422
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 422
-    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+    verifies_422_response(response)
 
 
 @pytest.mark.parametrize("role", ['executive_producer'])
@@ -235,12 +239,7 @@ def test_422_in_patch_movie_invalid_fields(client, token_header, role):
     response = client.patch('/movies/5',
                             json={"tittle": "Titanic 3"},
                             headers=token_header[role])
-    assert response.status_code == 422
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 422
-    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+    verifies_422_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
@@ -381,12 +380,7 @@ def test_422_in_post_actors_invalid_fields(client, token_header, role):
     response = client.post('/actors',
                            json=malformed_actor,
                            headers=token_header[role])
-    assert response.status_code == 422
-
-    data = response.get_json()
-    assert not data['success']
-    assert data['error'] == 422
-    assert data['message'] == "The request was well-formed but was unable to be followed due to semantic errors"
+    verifies_422_response(response)
 
 
 @pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
