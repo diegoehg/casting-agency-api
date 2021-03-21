@@ -200,6 +200,14 @@ def create_app(test_config=None):
             message="Resource not found"
         ), error.code
 
+    @app.errorhandler(405)
+    def method_not_allowed_handler(error):
+        return jsonify(
+            success=False,
+            error=error.code,
+            message="Method not allowed"
+        ), error.code
+
     @app.errorhandler(422)
     def unprocessable_entity_handler(error):
         return jsonify(
