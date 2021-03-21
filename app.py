@@ -73,6 +73,25 @@ def create_app(test_config=None):
             db.session.rollback()
             abort(422)
 
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    @requires_auth('update:movies')
+    def patch_actor(movie_id):
+        m = Movie.query.get_or_404(movie_id)
+        patch_data = request.get_json()
+
+        if 'title' in patch_data:
+            m.title = patch_data['title']
+
+        if 'release_date' in patch_data:
+            m.release_date = date.fromisoformat(patch_data['release_date'])
+
+        m.update()
+
+        return jsonify(
+            success=True,
+            movie=m.format()
+        )
+
     @app.route('/actors')
     @requires_auth('get:actors')
     def get_actors():

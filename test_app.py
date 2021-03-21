@@ -242,6 +242,25 @@ def test_401_post_movies_with_casting_director(client,
     assert response.status_code == 401
 
 
+def test_patch_movie(client, token_casting_director):
+    patch_body = {
+        "release_date": "2021-03-19"
+    }
+    movie_before_patch = Movie.query.get(3).format()
+    response = client.patch('/movies/3',
+                            json=patch_body,
+                            headers=token_casting_director)
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['success']
+
+    movie_after_patch = data['movie']
+    assert movie_after_patch['title'] == movie_before_patch['title']
+    assert movie_after_patch['release_date'] != movie_before_patch['release_date']
+    assert movie_after_patch['release_date'] == patch_body['release_date']
+
+
 def test_get_actors_default_page(client, token_casting_assistant):
     response = client.get('/actors',
                           headers=token_casting_assistant)
