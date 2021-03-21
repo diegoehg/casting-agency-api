@@ -264,7 +264,7 @@ def test_400_in_patch_movie_malformed_request(client, token_header, role):
 
 
 @pytest.mark.parametrize("role", ['casting_assistant'])
-def test_401_int_patch_movie_unauthorized_role(client, token_header, role):
+def test_401_in_patch_movie_unauthorized_role(client, token_header, role):
     response = client.patch('/movies/5',
                             json={'release_date': '2023-04-23'},
                             headers=token_header[role])
@@ -503,11 +503,25 @@ def test_400_in_patch_actor_malformed_request(client, token_header, role):
 
 
 @pytest.mark.parametrize("role", ['casting_assistant'])
-def test_401_int_patch_actor_unauthorized_role(client, token_header, role):
+def test_401_in_patch_actor_unauthorized_role(client, token_header, role):
     response = client.patch('/actors/5',
                             json={'gender': 'male'},
                             headers=token_header[role])
     verifies_401_lack_of_permissions(response)
+
+
+@pytest.mark.parametrize(
+    "role, actor_id",
+    [("casting_director", 19),
+     ("executive_producer", 20)]
+)
+def test_delete_actor(client, token_header, role, actor_id):
+    response = client.delete(f'/actors/{actor_id}',
+                             headers=token_header[role])
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['success']
 
 
 def test_401_when_request_does_not_contain_authorization_header(client):

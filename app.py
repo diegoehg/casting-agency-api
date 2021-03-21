@@ -184,6 +184,13 @@ def create_app(test_config=None):
             actor=a.format()
         )
 
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+    @requires_auth('delete:actors')
+    def delete_actor(actor_id):
+        a = Actor.query.get_or_404(actor_id)
+        a.delete()
+        return jsonify(success=True)
+
     @app.errorhandler(400)
     def malformed_request_handler(error):
         return jsonify(
