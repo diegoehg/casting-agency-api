@@ -460,6 +460,14 @@ def test_422_in_patch_actor_invalid_fields(client, token_header, role):
     verifies_422_response(response)
 
 
+@pytest.mark.parametrize("role", ['casting_director', 'executive_producer'])
+def test_400_in_patch_actor_malformed_request(client, token_header, role):
+    response = client.patch('/actors/6',
+                            json="Malformed request",
+                            headers=token_header[role])
+    verifies_400_response(response)
+
+
 def test_401_when_request_does_not_contain_authorization_header(client):
     response = client.get('/movies')
     assert response.status_code == 401
