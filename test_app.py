@@ -272,6 +272,19 @@ def test_401_int_patch_movie_unauthorized_role(client, token_header, role):
 
 
 @pytest.mark.parametrize(
+    "role, movie_id",
+    [("executive_producer", 20)]
+)
+def test_delete_movie(client, token_header, role, movie_id):
+    response = client.delete(f'/movies/{movie_id}',
+                             headers=token_header[role])
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data['success']
+
+
+@pytest.mark.parametrize(
     "role",
     ['casting_assistant', 'casting_director', 'executive_producer']
 )

@@ -98,6 +98,13 @@ def create_app(test_config=None):
             movie=m.format()
         )
 
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    @requires_auth('delete:movies')
+    def delete_movie(movie_id):
+        m = Movie.query.get_or_404(movie_id)
+        m.delete()
+        return jsonify(success=True)
+
     @app.route('/actors')
     @requires_auth('get:actors')
     def get_actors():
