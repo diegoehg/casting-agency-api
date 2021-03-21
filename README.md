@@ -198,6 +198,20 @@ Response body example:
 }
 ```
 
+### DELETE /movies/{movie_id}
+It deletes the movie with the specified ID.
+
+* Response body fields:
+  - `success`: boolean value that indicates the request has been successful.
+* Permission required: `delete:movies`
+
+Response body example:
+```json
+{
+  "success": true,
+}
+```
+
 ### GET /actors
 It returns a paginated list of actors & the total number of actors saved in the
 database.
