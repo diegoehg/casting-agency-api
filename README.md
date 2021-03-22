@@ -76,13 +76,12 @@ if __name__ == '__main__':
 ```
 
 ### Testing the API
-A suite of unit tests is provided in `test_app.py` module, implemented using
-pytest. It was chosen pytest over unittest because it's more easier to
-parametrize the tests, and in some cases the same endpoint test is run against
-two or three different role JWTs.
+A suite of [pytest](https://docs.pytest.org/en/stable/) unit tests is provided
+in `test_app.py` module. Before running the tests, load the environment
+variables from the `setup.sh` script.
 
-There are two pytest fixture where you can configure the tests. The main one is
-the client fixture:
+There are two pytest fixtures that include testing configuration. The main one
+is the `client` fixture:
 
 ```python
 @pytest.fixture(scope='module')
@@ -104,19 +103,22 @@ def client():
       load_data()
       yield testing_client
 ```
-In this fixture you can configure a URL to connect to a testing database,
-[by following the SQLAlchemy guide](https://docs.sqlalchemy.org/en/latest/core/engines.html?highlight=create_engine#database-urls).
-There is included a `load_data` function imported from the `data_loader`
-module. This functions inserts some Movie and Actor rows for running the tests.
-Drop and create the database before running the tests. If you're using 
-PostgreSQL, this can be done by running:
+In this fixture you can configure a URL to connect to a local testing database,
+through the database variables before `test_config`.
+[Consult the SQLAlchemy guide](https://docs.sqlalchemy.org/en/latest/core/engines.html?highlight=create_engine#database-urls)
+for filling the corresponding values.
+
+This fixture also includes a `load_data` function, imported from the 
+`data_loader` module. It inserts some rows in the database before the tests.
+Drop and create the testing database before running the tests. If you're using
+PostgreSQL, this can be done in this way:
 
 ```bash
 dropdb testing_database
 createdb testing_database
 ```
 
-The second fixture where you can configure the tests is `token_header`:
+The second fixture that includes testing configuration is `token_header`:
 
 ```python
 @pytest.fixture(scope='module')
@@ -133,19 +135,24 @@ def token_header():
   }
 ```
 
-In this fixture, is provided a dictionary with authorization headers for the
-three different roles associated with this application (these roles are 
-described in the next section). Before running the tests, introduce the 
-corresponding JWTs to the `get_authorization_header` function.
+It provides a dictionary with authorization headers for the three different 
+roles associated with this application (these roles are described in the next
+section). If you want to include your own tokens, pass them to the
+`get_authorization_header` functions.
 
-After configuring the database and the JWTs, you can run the tests in these
-two ways:
+**Note**: This tests take the same configuration included in the Auth0
+environment variables, it is necessary to load them from `setup.sh`.
 
+For running the test, just run pytest:
 ```bash
 pytest
-
-python3 test_app.py
 ```
+
+Or run the `test_app` module:
+```bash
+python test_app.py
+```
+
 
 ## Access roles & permissions
 This API is segmented for being used by 3 different roles: _casting assistant_,
