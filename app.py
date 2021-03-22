@@ -30,7 +30,7 @@ def create_app(test_config=None):
         page_number = request.args.get('page', 1, type=int)
         movies = get_paginated_query(Movie.query, Movie.id, page_number)
 
-        if len(movies) == 0:
+        if page_number > 1 and len(movies) == 0:
             abort(404)
 
         return jsonify(
@@ -111,7 +111,7 @@ def create_app(test_config=None):
         page_number = request.args.get('page', 1, type=int)
         actors = get_paginated_query(Actor.query, Actor.id, page_number)
 
-        if len(actors) == 0:
+        if page_number > 1 and len(actors) == 0:
             abort(404)
 
         return jsonify(
