@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2de09fe6-25b5-4f1e-a168-f99337c1dff3",
+		"_postman_id": "402f2525-8fb7-4e6b-96a4-8e5601077c43",
 		"name": "diegoehg-casting-agency-api-endpoints",
 		"description": "It contains a set of request to the endpoints hosted at Heroku, with the tokens of three different roles.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -756,6 +756,394 @@
 					{
 						"key": "token",
 						"value": "{{casting-director-token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Executive producers tests",
+			"item": [
+				{
+					"name": "GET /movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/movies",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"movies"
+							]
+						},
+						"description": "t returns a paginated list of movies & the total number of movies."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /movies/{movie_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/movies/1",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"movies",
+								"1"
+							]
+						},
+						"description": "Obtains an movie"
+					},
+					"response": []
+				},
+				{
+					"name": "POST /movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Dune\",\n    \"release_date\": \"2021-08-16\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{heroku-api-hosting}}/movies",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"movies"
+							]
+						},
+						"description": "It adds a new movie to the database."
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH /movies/{movie_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Lady Bug\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{heroku-api-hosting}}/movies/88",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"movies",
+								"88"
+							]
+						},
+						"description": "It updates the indicated fields of an existent movie."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /movies/{movie_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/movies/430",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"movies",
+								"430"
+							]
+						},
+						"description": "It deletes the movie with the specified ID."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/actors",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"actors"
+							]
+						},
+						"description": "It returns a paginated list of actors & the total number of actors."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /actors/{actor_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/actors/1",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"actors",
+								"1"
+							]
+						},
+						"description": "It returns the actor with the specified ID."
+					},
+					"response": []
+				},
+				{
+					"name": "POST /actors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ted Williams\",\n    \"age\": 35,\n    \"gender\": \"male\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{heroku-api-hosting}}/actors",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"actors"
+							]
+						},
+						"description": "It adds a new actor to the database"
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH /actors/{actor_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Alma Romeo\",\n    \"age\": 22\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{heroku-api-hosting}}/actors/564",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"actors",
+								"564"
+							]
+						},
+						"description": "It updates the indicated fields of an existent actor."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /actors/{actor_id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{heroku-api-hosting}}/actors/100",
+							"host": [
+								"{{heroku-api-hosting}}"
+							],
+							"path": [
+								"actors",
+								"100"
+							]
+						},
+						"description": "It deletes the actor with the specified ID."
+					},
+					"response": []
+				}
+			],
+			"description": "Tests to the API endpoints using a executive producer token.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{executive-producer-token}}",
 						"type": "string"
 					}
 				]
