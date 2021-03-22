@@ -155,12 +155,12 @@ python test_app.py
 
 
 ## Access roles & permissions
-This API is segmented for being used by 3 different roles: _casting assistant_,
-_casting director_ and _executive producer_.
+The access to this API's endpoint is segmented in 3 different roles:
+_casting assistant_, _casting director_ and _executive producer_.
 
-* The casting assistant assists a casting director in the search of actors & 
+* The casting assistant helps a casting director in the search of actors & 
   actresses for different projects.
-* The casting director cast actors and checks to which movie assign them.
+* The casting director casts actors and checks to which movie assign them.
 * The executive producer is the responsible of production of different movies.
 
 The permissions assigned to these roles are the following:
@@ -168,7 +168,7 @@ The permissions assigned to these roles are the following:
   * `get:movies`
   * `get:actors`
 * Casting director:
-  * All the permissions of a casting asistant
+  * All the permissions of a casting assistant
   * `post:actors`
   * `update:actors`
   * `delete:actors`
@@ -177,6 +177,8 @@ The permissions assigned to these roles are the following:
   * All the permissions of a casting director
   * `post:movies`
   * `delete:movies`
+  
+The permissions map directly the endpoints of this API.
 
 ## API Endpoints
 
