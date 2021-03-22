@@ -39,27 +39,100 @@ source setup.sh
 ```
 
 ### Running Flask
-For running the API, just execute the `app` module:
+After setting up the corresponding variables, you can run the API locally
+by running the `app` module:
 
 ```bash
 python3 app.py
 ```
 
+In this module, the app is set up to run in port 8080 and with debug mode on,
+you can change this by modifying the app.run sentence on the __main__ block:
+
+```python
+if __name__ == '__main__':
+  APP.run(host='0.0.0.0', port=8080, debug=True)
+```
+
 ### Testing the API
-A suite of unit tests is provided in `test_app.py` module. You can compose an
-URL to connect to a testing database. For running the suit of test, just run:
+A suite of unit tests is provided in `test_app.py` module, implemented using
+pytest. It was chosen pytest over unittest because it's more easier to
+parametrize the tests, and in some cases the same endpoint test is run against
+two or three different role JWTs.
+
+There are two pytest fixture where you can configure the tests. The main one is
+the client fixture:
+
+```python
+@pytest.fixture(scope='module')
+def client():
+  database_dialect = "postgresql"
+  database_user = "tester_user"
+  database_password = "password_testing_user"
+  database_location = "localhost:5432"
+  database_name = "testing_database"
+
+  test_config = {
+    'DATABASE_URL': f"{database_dialect}://{database_user}:{database_password}@{database_location}/{database_name}"
+  }
+
+  app = create_app(test_config)
+  with app.test_client() as testing_client:
+    with app.app_context():
+      db.create_all()
+      load_data()
+      yield testing_client
+```
+In this fixture you can configure a URL to connect to a testing database,
+[by following the SQLAlchemy guide](https://docs.sqlalchemy.org/en/latest/core/engines.html?highlight=create_engine#database-urls).
+There is included a `load_data` function imported from the `data_loader`
+module. This functions inserts some Movie and Actor rows for running the tests.
+Drop and create the database before running the tests. If you're using 
+PostgreSQL, this can be done by running:
+
+```bash
+dropdb testing_database
+createdb testing_database
+```
+
+The second fixture where you can configure the tests is `token_header`:
+
+```python
+@pytest.fixture(scope='module')
+def token_header():
+  def get_authorization_header(token):
+    return {
+      'Authorization': f'Bearer {token}'
+    }
+
+  return {
+    "casting_assistant": get_authorization_header("casting_assistant_JWT"),
+    "casting_director": get_authorization_header("casting_director_JWT"),
+    "executive_producer": get_authorization_header("executive_producer_JWT")
+  }
+```
+
+In this fixture, is provided a dictionary with authorization headers for the
+three different roles associated with this application (these roles are 
+described in the next section). Before running the tests, introduce the 
+corresponding JWTs to the `get_authorization_header` function.
+
+After configuring the database and the JWTs, you can run the tests in these
+two ways:
 
 ```bash
 pytest
+
+python3 test_app.py
 ```
 
-## Access roles
+## Access roles & permissions
 This API is segmented for being used by 3 different roles: _casting assistant_,
 _casting director_ and _executive producer_.
 
 * The casting assistant assists a casting director in the search of actors & 
   actresses for different projects.
-* The casting director cast actors and assigns them to movies being produced.
+* The casting director cast actors and checks to which movie assign them.
 * The executive producer is the responsible of production of different movies.
 
 The permissions assigned to these roles are the following:
@@ -77,10 +150,10 @@ The permissions assigned to these roles are the following:
   * `post:movies`
   * `delete:movies`
 
-## Endpoints
+## API Endpoints
 
 ### GET /movies
-It returns a paginated list of movies & the total number of movies kept in the
+It returns a paginated list of movies & the total number of movies saved in the
 database.
 
 * Request arguments:
