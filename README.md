@@ -1,27 +1,36 @@
 # Casting Agency API
 
 The purpose of this API is helping assistants, directors & producers to manage
-the talent and the projects they are currently working on. This API provides
-endpoints for handling information about actors and movies.
+the talent and the projects they are currently working on. It provides endpoints
+for handling information about actors that they are considering to cast, and
+data about future projects.
+
+The main motivation of implementing this application is demonstrate the skills
+learned from Udacity Full Stack Nanodegree program, and it integrates some of
+the technologies used there: representing models using SQLAlchemy, implementing
+and API using Flask, provide authentication through Auth0.
 
 
 ## Installation
-For installing this application locally, clone this repository and install 
-the requirements listed:
+Before installation, install or update your Python runtime to version 3.8,
+Then clone this repository and set up a virtual environment by using `venv`
+module. If you haven't done this before, you can follow a guide
+[right in this link](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+
+After setting up the virtual environment, you can install the project 
+dependencies using pip:
 
 ```bash
 pip install -r requirements.txt
 ```
-It is recommended to do it in a virtual environment, 
-[by using `venv` module](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
 
 
 ## Running the API
 
 ### Enviroment variables
-Before running the app, some environment variables should be set up for
-its correct execution. These variables are related with SQLAlchemy & Auth0
-settings. Be sure to include them in the environment where you run this app:
+Before running the app, some environment variables should be set up. These 
+variables are related with SQLAlchemy & Auth0 settings. Be sure to include them
+in the environment where you run this app:
 
 * `DATABASE_URL`: contains the configuration for connecting to the database.
 [Follow the SQLAlchemy guide for composing this URL](https://docs.sqlalchemy.org/en/latest/core/engines.html?highlight=create_engine#database-urls).
@@ -39,19 +48,31 @@ source setup.sh
 ```
 
 ### Running Flask
-After setting up the corresponding variables, you can run the API locally
-by running the `app` module:
+After setting up the corresponding variables, you can run the API locally using 
+Flask. Set up Flask for running the `app` module in a development environment
+and then run it:
+
+```bash
+export FLASK_APP=app.py
+export FLASK_ENV=development
+flask run
+```
+
+The app will be running in the URL http://localhost:5000.
+
+An alternative way is to run the `app.py` script directly:
 
 ```bash
 python3 app.py
 ```
 
-In this module, the app is set up to run in port 8080 and with debug mode on,
-you can change this by modifying the app.run sentence on the __main__ block:
+In this other way, the app is set up to run in port 8080 with debug mode on.
+You can change this by modifying the app.run sentence, located in the __main__
+block at the end of the script:
 
 ```python
 if __name__ == '__main__':
-  APP.run(host='0.0.0.0', port=8080, debug=True)
+  app.run(host='0.0.0.0', port=8080, debug=True)
 ```
 
 ### Testing the API
