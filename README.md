@@ -183,15 +183,14 @@ The permissions map directly the endpoints of this API.
 ## API Endpoints
 
 ### GET /movies
-It returns a paginated list of movies & the total number of movies saved in the
-database.
+It returns a paginated list of movies & the total number of movies saved.
 
 * Request arguments:
-  - `page`: indicate the page number requested (e. g. `/movies=?page=3`)
+  - `page`: indicate the page number requested (e. g. `/movies?page=3`)
 * Response body fields:
-  - `success`: boolean value that indicates if the request has been succesful.
+  - `success`: boolean value that indicates if the request has been successful.
   - `movies`: contains a list of movies, at most 10 for every page.
-  - `total_movies`: number of movies included in the database.
+  - `total_movies`: total number of movies included in the database.
 * Permission required: `get:movies`
   
 Response body example:
@@ -245,7 +244,7 @@ It adds a new movie to the database.
   - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
 * Response body fields:
   - `success`: boolean value that indicates if the request has been successful.
-  - `movie`: JSON object with same fields of request body plus a generated ID.
+  - `movie`: JSON object corresponding to the posted movie.
 * Permission required: `post:movies`
   
 Request body example:
@@ -272,14 +271,14 @@ Response body example:
 It updates the indicated fields of an existent movie.
 
 The request body can have one of the movie fields, or both. This endpoint will
-update just the fields passed.
+just update the fields passed in the request body.
 
 * Request body fields:
   - `title`: Title of the movie.
   - `release_date`: Release date of the movie in [ISO 8601 format](https://www.iso.org/iso-8601-date-and-time-format.html).
 * Response body fields:
   - `success`: boolean value that indicates if the request has been successful.
-  - `movie`: JSON object with requested movie data, including the updated field.
+  - `movie`: JSON object corresponding to the updated movie.
 * Permission required: `update:movies`
 
 Request body example:
@@ -316,15 +315,14 @@ Response body example:
 ```
 
 ### GET /actors
-It returns a paginated list of actors & the total number of actors saved in the
-database.
+It returns a paginated list of actors & the total number of actors saved.
 
 * Request arguments:
-  - `page`: indicate the page number requested (e. g. `/actors=?page=3`)
+  - `page`: indicate the page number requested (e. g. `/actors?page=3`)
 * Response body fields:
   - `success`: boolean value that indicates if the request has been succesful.
   - `actors`: contains a list of actors, at most 10 for every page.
-  - `total_actors`: number of actors included in the database.
+  - `total_actors`: total number of actors included in the database.
 * Permission required: `get:actors`
 
 Response body example:
@@ -384,7 +382,7 @@ It adds a new actor to the database.
     are allowed: `male` or `female`.
 * Response body fields:
   - `success`: boolean value that indicates if the request has been successful.
-  - `actor`: JSON object with same fields of request body plus a generated ID.
+  - `actor`: JSON object with the posted actor.
 * Permission required: `post:actors`
 
 Request body example:
@@ -413,7 +411,7 @@ Response body example:
 It updates the indicated fields of an existent actor.
 
 The request body can have one of the actor fields, or all of them. This endpoint
-will update just the fields passed.
+will just update the fields passed in the request body.
 
 * Request body fields:
   - `name`: Name of the actor.
@@ -422,7 +420,7 @@ will update just the fields passed.
   accepts two values: `male` or `female`.
 * Response body fields:
   - `success`: boolean value that indicates if the request has been successful.
-  - `actor`: JSON object with requested actor data, including the updated fields.
+  - `actor`: JSON object with the updated actor.
 * Permission required: `update:actors`
 
 Request body example:
@@ -464,8 +462,8 @@ Response body example:
 In the case of errors, a JSON response is returned.
 
 * Response body fields:
-  - `success`: boolean value that indicates the request has successful. In the
-    case of errors, it has a false value.
+  - `success`: boolean value that indicates the request has failed by holding a
+    false value.
   - `error`: HTTP status code (e. g. 404, 401, 500).
   - `message`: A short description of the error.
 
