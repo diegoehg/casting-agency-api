@@ -476,6 +476,35 @@ Response body example:
 }
 ```
 
+## Trying this API live
+This app is hosted at Heroku, in the following URL:
+https://diegoehg-casting-agency-api.herokuapp.com/
+
+For testing it, a Postman collection is provided in this repository, with JWTs
+for accessing the different endpoints. This JWTs are located in the variables 
+section of the collection, at the end of the file:
+
+```json
+{
+  "variable": [
+    {
+      "key": "casting-assistant-token",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IllKTHRSdUJFM1QxVXVNR0VkTWdaeCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iYWxpYW4udXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwMGRmNmI2ZmZjYmUyMDA2YTg4NmUyZCIsImF1ZCI6ImNhc3RpbmctYWdlbmN5LWF1dGgtYXBpIiwiaWF0IjoxNjE2NDEyNDM4LCJleHAiOjE2MTY0OTg4MzgsImF6cCI6Ik9yQTZkRFZiVmVYZ01YQkFsVHFuWHI4UE9RU2MyYVY4Iiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.CTqWa5XBwyMMaZ6UobUDujenF5ezLewoSyYVd4wM3QBIwStDPOS0QNr9udmFr0mkSQYZYXLCQmSuwd9p1_CZk0HiZaP96rQsTqSKmlBsdOGvS-ZvZ_BiJVGumdrL-GrlZWPZnOcoXyLuKX2haokmS23ZrYYNQBq6U1kz7-sLganj_0X9EDz9fyEDqaSOYlJ-pJt8-7pE8cpfgO41YTm9CwXNX0bwqGn1jdDF9GHQAg7rD9J7e_m2pAbIOABI_qY9ny65m1PmM4YXSwcla4nRWn9XT51jnzkfHdVwBXHNuBVMOm9FIW1RXPmy0LeDwk9Eq78t5fAPCduWdsUlCnalvA"
+    },
+    {
+      "key": "casting-director-token",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IllKTHRSdUJFM1QxVXVNR0VkTWdaeCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iYWxpYW4udXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwNTJiMmQ1ODQzNWRhMDA2ODg0ODI2OSIsImF1ZCI6ImNhc3RpbmctYWdlbmN5LWF1dGgtYXBpIiwiaWF0IjoxNjE2NDEyNDk4LCJleHAiOjE2MTY0OTg4OTgsImF6cCI6Ik9yQTZkRFZiVmVYZ01YQkFsVHFuWHI4UE9RU2MyYVY4Iiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3JzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIl19.QUvFTLUNVEIIIRyuCL1HasGYeVVeBEDxeSjeEFHA4M0F-ygMMCazvDufka3xVEJgzSGsfvOGHs18cwGqj0cytPhN4b1_UBeOE2KkwBF_Gtdm76ySxKm5RN1Ql45KTzHZqx-QrvnZi_g7qbffpuIoUZUYECpJLYNHgZ3ZaJ-Zj65X3AEZV6gnmIGHuh3nMz2bku_YjUMzsLZJ1h4xzdrBobnLs7cYkah54PbYd-xdnlf8FfhF7wYGDJkRTz0JRVE8hggW-9-HH_n4-pBbNCa7O4DSq_MK78Q_j3ZBluqVXplnY_PwW8W-l_sUcasv2GMimhWyogQbSRBd1vS7enaFZg"
+    },
+    {
+      "key": "executive-producer-token",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IllKTHRSdUJFM1QxVXVNR0VkTWdaeCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iYWxpYW4udXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwNTJiNDY2MjYyNjFhMDA2ZmE5MGJhOSIsImF1ZCI6ImNhc3RpbmctYWdlbmN5LWF1dGgtYXBpIiwiaWF0IjoxNjE2NDEyNjA0LCJleHAiOjE2MTY0OTkwMDQsImF6cCI6Ik9yQTZkRFZiVmVYZ01YQkFsVHFuWHI4UE9RU2MyYVY4Iiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsImdldDphY3RvcnMiLCJnZXQ6bW92aWVzIiwicG9zdDphY3RvcnMiLCJwb3N0Om1vdmllcyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIl19.eP_CF8BYHL1nfbVXnIc1_Rim4KwDTYO4wL5GfPmmLboNoXuIRYdcjJf7N7XpPVRTx-Uw6mizNtvqesRM8IwoEdix4YnSuoMmxyQ2kjdNo4EE53ZE9FE9YZJoRE3NIqVmcZc-CmI14M8iYlK0vhJGMsPsG0QXsU9Ec1Tr0iEbNetkpS7Vuqzb712JEznaEFqKlELyaaMh7r1Rf4XstC62hUo2m25CHkpAY4ZoJ0dlqcgyHc1DzF6Fe_QdtXpd0YAJvm17Mw9kBcV76RN5_JyWHEZSWNZaqWJwqddjUGsltFHk3ei-dyPe8a9sEcP6bdDUG4F70KWMBYISEjMd79DTyw"
+    }
+  ]
+}
+```
+
+Load this collection from Postman and give it a try!
+
 ## License
 All of the files included in this project are covered by the 
 [MIT License](https://github.com/diegoehg/casting-agency-api/blob/main/LICENSE).
